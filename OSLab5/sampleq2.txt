@@ -1,0 +1,10 @@
+The current line number is not prime and we are inside Thread 1
+The current line number is prime and we are inside Thread 1
+The current line number is prime and we are inside Thread 1
+The current line number is not prime and we are inside Thread 1
+The current line number is prime and we are inside Thread 1
+The current line number is not prime and we are inside Thread 1
+The current line number is prime and we are inside Thread 1
+The current line number is not prime and we are inside Thread 1
+The current line number is not prime and we are inside Thread 1
+The current line number is not prime and we are inside Thread 1

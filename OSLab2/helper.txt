@@ -1,0 +1,199 @@
+#!/bin/bash
+# Problem 1
+# As per the problem, first argument N will be number of elements in array
+# Next N arguments will be the elements of array.
+# Last element will be the number to be searched.
+
+# Storing CLA into array
+arr=(${@:2:$(($1))})
+
+# Result Index and element to be searched
+idx=-1
+search=${!#}
+
+# Iterating the array to check for element of interest
+for i in "${!arr[@]}";
+do
+    if [ ${arr[$i]} -eq $search ]
+    then
+        idx=$i
+    fi
+done
+
+# If valid index, then found else not
+if [ $idx -ne -1 ]
+then
+    echo "Element $search found at index $idx."
+else
+    echo "Element not found."
+fi
+
+
+
+Q2)
+
+#!/bin/bash
+# Problem 2
+
+# Function to find sum of prime less than or equal to a number
+function PrimeNoLessThan() {
+	if (($1 < 2))
+	then
+		echo 0
+	else
+		for((i=2;i<$1;i++))
+		do
+			if [[ $(($1 % $i)) -eq 0 ]]
+			then
+                # Not a prime number
+				echo $(PrimeNoLessThan $(( $1 - 1)) )
+				return
+			fi
+		done
+        # Prime number, therefore add
+		echo $(( $1 + $(PrimeNoLessThan $(( $1 - 1))) ))
+	fi
+}
+
+# Recursive function to calculate factorial of a number
+function fact() { 
+    # Base case
+    if (( $1 < 2 ))
+    then
+        echo 1
+    else	
+        # Recursive call
+        echo $(( $1 * $(fact $(( $1 - 1 ))) ))
+    fi
+}
+
+if [ $# -ne 1 ]
+then
+	echo "Error: Input format is incorrect"
+	exit 1
+fi
+
+echo "The required answer is : $(( $(PrimeNoLessThan $1) * $(fact $1) ))"
+
+
+
+
+
+Q3)
+
+#!/bin/bash
+# Problem 3
+# We define a function to find and print XOR value
+xor () {
+    a=$1
+    b=$2
+    res=0
+    pw=1
+    # Take the numbers bit by bit
+    while [[ a -gt 0 ]] || [[ b -gt 0 ]]
+    do
+        a_bin=$(($a % 2))
+        b_bin=$(($b % 2))
+        xr=$(($a_bin * !$b_bin + !$a_bin * $b_bin))
+        # Keep adding in the result
+        res=$(($res + $xr * $pw))
+        a=$(($a / 2))
+        b=$(($b / 2))
+        pw=$(($pw * 2))
+    done
+    echo "XOR Value = $res"
+}
+if [[ $# -ne 2 ]]
+then
+    echo "Error: Please enter 2 integers as arguments."
+    exit 1
+else
+    xor $1 $2
+fi
+
+
+
+Q4)
+
+#!/bin/bash
+# Problem 4
+if [ $# -ne 1 ]; 
+then
+	echo "Error: Missing / Invalid arguments"
+	echo "Note: Enter the password in double quotes as input. Or escape special characters if any."
+	exit 1
+fi
+
+# Storing password and length
+password=$1
+length=${#password}
+echo "Password Entered: $1"
+echo "Length of Password: $length"
+
+# Characters for matching
+alpha="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+numbers="0123456789"
+special="/()<>?"
+
+# A function to check if one of the characters from a set of characters is present in passwors string
+function findPresence() {
+	# $1 is basically the set of characters whose presence is to be checked
+	set=$1
+	for ((i = 0; i < $length; ++i))
+    do
+		for ((j = 0; j < ${#set}; ++j))
+        do
+			if [ ${password:i:1} == ${set:j:1} ]; 
+			then
+				echo 1
+				return
+			fi
+		done
+	done
+	echo 0
+    return					
+}
+
+# Validating presence of characters as per problem statement
+if [ $length -ge 7 ] && [ $(findPresence "$alpha") -eq 1 ]  && [ $(findPresence "$numbers") -eq 1 ] && [ $(findPresence "$special") -eq 1 ]; then
+	echo "<Valid Password>"
+else
+	echo "<Invalid Password>"
+fi
+
+
+//---------------------------------------------------------------------
+
+#include <stdio.h>
+
+// Function to find and print xor of two numbers
+void XOR(int a, int b) {
+    int answer = 0;
+    int multiplier=1;
+
+    while (1) {
+        if(a==0 && b==0)
+            break;
+        int lsba= a%2;
+        int lsbb= b%2;    
+        int lsbxor = lsba * !(lsbb) + !(lsba) * lsbb;
+        answer += lsbxor * multiplier;
+        a /= 2;
+        b /= 2;
+        multiplier *= 2;
+    }
+    printf("XOR of %d and %d = %d\n", a, b, answer);
+}
+
+// Main function
+int main(int argc, char* argv[]) {
+    // Argument count should be 3 exactly
+    if (argc != 3) printf("Error: Invalid number of arguments(2 required)");
+    else {
+        int a, b;
+        sscanf(argv[1], "%lld", &a);
+        sscanf(argv[2], "%lld", &b);
+        // Find and print XOR
+        XOR(a, b);
+    }
+}
